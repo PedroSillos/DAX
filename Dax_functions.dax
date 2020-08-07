@@ -9,11 +9,66 @@ MIN()
 SUM('Ordes'[Price]) //OK
 SUM('Ordes'[Price] * 'Orders'[Quantity]) //ERROR
 
-//X Aggregation functions - receive (<tablename>, <expression>)
+//X Aggregation functions - SUMX(<tablename>, <expression>)
 //Creates a measure without the need for the additional calculated column
 //Allows us to do what normal Aggregation fuctions can't
-Total Sales :=
+Total Sales =
 SUMX(
     Sales,
     'Sales'[Net Price] * 'Sales'[Quantity]
 )
+
+//Counting functions
+COUNT() (?)
+COUNTA() //anything but blanks (nulls)
+
+COUNTBLANK() //NULL
+COUNTROWS() //COUNTS ROWS IN A TABLE
+
+DISTINCTCOUNT() //Distinc count
+
+//Logical functions
+AND() //AND(A,B) = A && B
+OR() //OR(A,B) = A || B
+NOT() //NOT(A) = !A
+IF()
+IFERROR()
+
+//Information Functions
+ISBLANK()
+ISNUMBER()
+ISNONTEXT()
+ISTEXT()
+ISERROR()
+
+//MAX and MIN
+MAX('Sales'[SalesAmount])
+//or return the higher from 2 columns
+MAX('Sales'[SalesAmount], 'Sales'[ListPrice])
+
+//Instead of using:
+IF(
+    'Sales'[SalesAmount] <> 0,
+    'Sales'[GrossMargin] / 'Sales'[SalesAmount],
+    0
+)
+//We should use:
+DIVIDE(
+    'Sales'[GrossMargin],
+    'Sales'[SalesAmount],
+    0
+)
+
+//Text functions
+CONCATENTATE
+REPLACE()
+SEARCH()
+UPPER()
+FIXED()
+
+//Date functions
+DATE()
+HOUR()
+NOW()
+EOMONTH()
+WEEKDAY()

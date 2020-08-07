@@ -1,0 +1,19 @@
+//Aggregation functions - only work on numerical columns
+//DAX is case sensitive
+sum() //ERROR
+SUM() //OK
+AVERAGE()
+MAX()
+MIN()
+//CAN BE USED ONLY IN A SINGLE COLUMN
+SUM('Ordes'[Price]) //OK
+SUM('Ordes'[Price] * 'Orders'[Quantity]) //ERROR
+
+//X Aggregation functions - receive (<tablename>, <expression>)
+//Creates a measure without the need for the additional calculated column
+//Allows us to do what normal Aggregation fuctions can't
+Total Sales :=
+SUMX(
+    Sales,
+    'Sales'[Net Price] * 'Sales'[Quantity]
+)

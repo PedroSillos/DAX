@@ -1,0 +1,26 @@
+//Calculated column in Power BI
+SalesAmount = 'Sales'[Unit Price] * 'Sales'[Quantity]
+SalesAmount = Sales[Unit Price] * Sales[Quantity]
+SalesAmount = [Unit Price] * [Quantity]
+//All 3 above work, but the first is the only that always works
+
+Gross Margin = 'Sales'[Net Price] - 'Sales'[Unit Cost]
+
+Gross Margin Percentage = 'Sales'[Gross Margin] / 'Sales'[SalesAmount]
+
+//Calculated Measure - in a measure, there is no concept of current row
+
+//this line has an ERROR
+Gross Margin % column = 'Sales'[Gross Margin] / 'Sales'[SalesAmount]
+
+//this line is OK
+Gross Margin % Measure = SUM('Sales'[Gross Margin]) / SUM('Sales'[SalesAmount])
+
+//Calculated columns are computed on refresh time and stored in the model
+//Measures are not stored in the model, the calculation happens at query time
+
+//Calculated column -> current row
+//Measure -> aggregation, no current row
+
+//Columns use memory
+//Measures consume CPU

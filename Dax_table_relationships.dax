@@ -1,0 +1,26 @@
+//Table relations
+
+//Following line returns ERROR
+Total Sales = 
+    SUMX(
+        Sales,
+        'Sales'[Quantity] * 'Product'[Unit Price] //'Product'[Unit Price] does not exist in Sales table
+    )
+
+//How to fix:
+Total Sales = 
+    SUMX(
+        Sales,
+        'Sales'[Quantity] * RELATED( 'Product'[Unit Price] ) //RELATED makes the n:1 relationship queryable
+    )
+//But RELATED only allows n:1, it can get only 1 value per iteration
+//To use 1:n relations, we use RELATEDTABLE
+
+NumberOfSales = //in table Product 
+    COUNTROWS( RELATEDTABLE(Sales) )
+
+SalesOfProduct = //in table Product
+    SUMX(
+        RELATEDTABLE( Sales ),
+        'Sales'[Quantity] * 'Sales'[Unit Price] 
+    )

@@ -1,0 +1,12 @@
+//variables in dax - good for not repeating costfull functions
+
+Corrected Quantity :=
+
+VAR
+    TotalQuantity = SUM(Sales[Quantity])
+RETURN
+    IF(
+        TotalQuantity > 1000,
+        TotalQuantity * 0.95,
+        TotalQuantity * 1.25
+    )

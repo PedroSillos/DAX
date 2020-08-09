@@ -1,0 +1,15 @@
+//DAX lets you pass whole tables between expressions
+FILTER
+ALL
+VALUES
+DISTINCT
+RELATEDTABLE
+//Their result is usually used inside functions, not as final value
+
+SUMX(
+    FILTER(
+        Orders,
+        'Orders'[Price] > 1
+    ),
+    Orders[Quantity] * Orders[Price]
+)

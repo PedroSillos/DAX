@@ -7,9 +7,74 @@ RELATEDTABLE
 //Their result is usually used inside functions, not as final value
 
 SUMX(
-    FILTER(
+    FILTER( //FILTER(<table>,<filter>) //adds a condition //returns a subtable  
         Orders,
         'Orders'[Price] > 1
     ),
-    Orders[Quantity] * Orders[Price]
+    'Orders'[Quantity] * 'Orders'[Price]
+)
+
+SUMX(
+    ALL(Orders), //ALL(table) //ignore any filter, even those in slicers //always returns the whole table
+    'Orders'[Quantity] * 'Orders'[Price]
+)
+
+ALL('Customers'[CustomerName]) //returns all distinct values of CustomerName in a single column
+
+COUNTROWS(
+    ALL( //returns all distinct values of these 3 columns in a 3 columns
+        'Orders'[Channel],
+        'Orders'[Color],
+        'Orders'[Size]
+    )
+)
+
+ALLEXCEPT( Orders, 'Orders'[City], )
+
+SUMX(
+    FILTER(  
+        ALL(Orders),
+        'Orders'[Channel]="Internet"
+    ),
+    'Orders'[Quantity] * 'Orders'[Price]
+)
+
+Number of Products :=
+COUNTROWS(
+    DISTINCT( 'Product'[ProductCode] ) //ALL() ignores filters, DISTINCT obeys filters
+)
+
+//BLANK: Tables with an incoming relationship might contain an additional blank row...
+// created by DAX to guarantee referential integrity
+
+//Some functions count blank, some dont
+
+Number of Products :=
+COUNTROWS(
+    VALUES( 'Product'[ProductCode] ) //DISTINCT() ignores BLANK, VALUES counts BLANKs and obeys filters
+)
+
+Number of Products :=
+COUNTROWS(
+    ALLNOBLANKROW( 'Product'[ProductCode] ) //ALLNOBLANKROW ignores filters and blankrows
+)
+
+//see image 1.1
+
+//Results of table functions inherit the relationships of their columns
+
+//in DAX relationships are part of the model and there is no need to specify in every query
+
+Category Total Sales := //that contain more than 10 products
+SUMX(
+    FILTER(
+        ProductCategory,
+        COUNTROWS(
+            RELATEDTABLE( Product )
+        ) > 10
+    ),
+    SUMX(
+        RELATEDTABLE( Sales ),
+        'Sales'[SalesAmount]
+    )
 )
